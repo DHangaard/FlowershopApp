@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class FlowerShop {
 
@@ -10,6 +8,7 @@ public class FlowerShop {
     private String name;
     private TextUI ui;
     private double total;
+    private boolean isFlowersArranged;
     private final double arrangedAsBouquetPrice = 50.0;
 
     // Constructor
@@ -21,6 +20,7 @@ public class FlowerShop {
         this.name = name;
         this.ui = new TextUI();
         this.total = 0.0;
+        this.isFlowersArranged = false;
 
         Collections.addAll(shopSelection,
                             new Flower("Tulip", 20.0),
@@ -75,20 +75,45 @@ public class FlowerShop {
 
     public void displayBouquetByPrice() {
         shopSelection.sort(Comparator.comparing(Flower::getPrice));
+        int counter = 1;
 
         for (Flower f : shopSelection) {
-            ui.displayMessage(f);
+            ui.displayMessage(counter + ") " + f.toString());
+            counter++;
         }
     }
 
-
+/*
     public void displayBouquetByName() {
         bouquet.sort(Comparator.comparing(Flower::getName));
+        int counter = 1;
 
         for (Flower f : bouquet){
-            ui.displayMessage(f);
+            ui.displayMessage(counter + " " + f.toString());
+            counter++;
         }
     }
+ */
+
+    // TODO Refactor this method
+    public void displayBouquetByName() {
+        Map<String, Integer> flowerCount = new HashMap<>();
+        Map<String, Double> flowerPrice = new HashMap<>();
+
+        for (Flower f : bouquet) {
+            String name = f.getName();
+            double price = f.getPrice();
+
+            flowerCount.put(name, flowerCount.getOrDefault(name, 0) + 1);
+            flowerPrice.put(name, flowerPrice.getOrDefault(name, 0.0) + price);
+        }
+
+        // Udskriv resultatet
+        for (String name : flowerCount.keySet()) {
+            ui.displayMessage(flowerCount.get(name) + " piece of " + name + ": " + String.format("%.2f", flowerPrice.get(name)) + ",-");
+        }
+    }
+
 
 
     private void chooseFlower() {
@@ -97,17 +122,19 @@ public class FlowerShop {
         int choice = ui.promptInteger("Choose a flower from the list");
         Flower flower = shopSelection.get(choice - 1);
         bouquet.add(flower);
+        ui.displayMessage("You chose: " + flower.getName() + "\n"); // Add empty line
     }
 
 
     private void chooseThreeFlowers() {
-        displayBouquetByPrice();
         int counter = 0;
 
         while (counter < 3) {
+            displayBouquetByPrice();
             int choice = ui.promptInteger("Choose a flower from the list");
             Flower flower = shopSelection.get(choice - 1);
             bouquet.add(flower);
+            ui.displayMessage("You chose: " + flower.getName() + "\n"); // Add empty line
             counter ++;
         }
     }
@@ -119,6 +146,11 @@ public class FlowerShop {
         for (Flower f : bouquet){
             total += f.getPrice();
         }
+
+        if (isFlowersArranged){
+            total += arrangedAsBouquetPrice;
+        }
+
         return total;
     }
 
@@ -128,19 +160,24 @@ public class FlowerShop {
         ui.displayMessage("You have chosen the following: ");
         displayBouquetByName();
 
+        // List if flowers are arranged
+        if (isFlowersArranged) {
+            ui.displayMessage("You have chosen to get your bouquet arranged");
+        }
+
         // List current total
-        ui .displayMessage("Current total: ");
         this.total = calculateTotal();
         String formattedTotal = ui.formatPriceWithTwoDecimals(total);
-        ui.displayMessage(formattedTotal);
+        ui .displayMessage("Current total: " + formattedTotal + "\n"); // Add empty line
 
         // Ask if buyer wants to pay for the bouquet to be arranged if more than one flower
-        if (bouquet.size()>1){
+        if (bouquet.size()>1 && !isFlowersArranged){
             arrangeFlowers();
         }
 
         // Finalise transaction
         if (ui.promptBinary("Do you want to finalize your purchase?")){
+            ui.displayMessage("The total cost is: " + total);
             exitProgram();
         } else {
             return;
@@ -154,16 +191,19 @@ public class FlowerShop {
         String question = "Do you want us to arrange your flowers for a total of " + formmatedArrangeAsBouquetPrice;
         String offerAccepted = "Your flowers will be arranged beautifully!\nNew total: ";
 
-        if (ui.promptBinary(question)){
+        if (ui.promptBinary(question)) {
             this.total += arrangedAsBouquetPrice;
             String formattedTotal = ui.formatPriceWithTwoDecimals(total);
             ui.displayMessage(offerAccepted + formattedTotal);
+            this.isFlowersArranged = true;
         }
+
     }
 
 
     private void exitProgram() {
-        ui.displayMessage("Have a nice day!");
+        ui.displayMessage("Thank you!\nHave a nice day!");
+        ui.closeScanner();
         System.exit(0);
     }
 }

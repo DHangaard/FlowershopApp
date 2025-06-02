@@ -6,6 +6,11 @@ public class TextUI {
     // Attributes
     private Scanner scanner;
 
+    // Constructor
+    TextUI() {
+       scanner = new Scanner(System.in);
+    }
+
     // Methods
     // Display Methods
     public void displayMessage(String message) {
@@ -27,7 +32,6 @@ public class TextUI {
 
     // Prompt methods
     public int promptInteger(String message) {
-        scanner = new Scanner(System.in);
         int input = 0;
         boolean keepGoing = true;
 
@@ -44,24 +48,22 @@ public class TextUI {
                 displayMessage("Error: use an integer as input.\n Try again:");
             }
         }
-        scanner.close();
+        System.out.println(); // Empty line
         return input;
     }
 
 
     public String promptText(String message) {
-        scanner = new Scanner(System.in);
 
         displayMessage(message);
         String input = scanner.nextLine();
 
-        scanner.close();
+        System.out.println(); // Empty line
         return input;
     }
 
 
     public boolean promptBinary(String message) {
-        scanner = new Scanner(System.in);
         boolean isChoosing = true;
         boolean isAnswerYes = false;
         String choice;
@@ -80,7 +82,11 @@ public class TextUI {
                 displayMessage("Error: input either 'y' for yes or 'n' for no: ");
             }
         }
-        scanner.close();
+        System.out.println(); // Empty line
         return isAnswerYes;
+    }
+
+    public void closeScanner() {
+        scanner.close();
     }
 }
