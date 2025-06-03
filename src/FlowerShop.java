@@ -3,8 +3,8 @@ import java.util.*;
 public class FlowerShop {
 
     // Attributes
-    private ArrayList<Flower> shopSelection;
-    private ArrayList<Flower> bouquet;
+    private List<Flower> shopSelection;
+    private Map<Flower, Integer> bouquet;
     private String name;
     private TextUI ui;
     private double total;
@@ -15,7 +15,7 @@ public class FlowerShop {
     FlowerShop(String name){
 
         shopSelection = new ArrayList<>();
-        bouquet = new ArrayList<>();
+        bouquet = new HashMap<>();
 
         this.name = name;
         this.ui = new TextUI();
@@ -83,46 +83,48 @@ public class FlowerShop {
         }
     }
 
-/*
-    public void displayBouquetByName() {
-        bouquet.sort(Comparator.comparing(Flower::getName));
-        int counter = 1;
 
-        for (Flower f : bouquet){
-            ui.displayMessage(counter + " " + f.toString());
-            counter++;
+    public void displayBouquetByName() {
+
+        // Get info from HashMap
+        for (Map.Entry<Flower, Integer> entry : bouquet.entrySet()) {
+            String name = entry.getKey().getName();
+            int amount = entry.getValue();
+            double typeTotal = entry.getKey().getPrice() * amount;
+            String typeTotalFormatted = ui.formatPriceWithTwoDecimals(typeTotal);
+
+            // Determine whether singular or plural
+            String pieceOrPieces = amount > 1 ? " pieces of " : " piece of ";
+
+            // Display buyers choice with price
+            ui.displayMessage(amount + pieceOrPieces + name + ": " + typeTotalFormatted);
         }
     }
- */
-
-    // TODO Refactor this method
-    public void displayBouquetByName() {
-        Map<String, Integer> flowerCount = new HashMap<>();
-        Map<String, Double> flowerPrice = new HashMap<>();
-
-        for (Flower f : bouquet) {
-            String name = f.getName();
-            double price = f.getPrice();
-
-            flowerCount.put(name, flowerCount.getOrDefault(name, 0) + 1);
-            flowerPrice.put(name, flowerPrice.getOrDefault(name, 0.0) + price);
-        }
-
-        // Udskriv resultatet
-        for (String name : flowerCount.keySet()) {
-            ui.displayMessage(flowerCount.get(name) + " piece of " + name + ": " + String.format("%.2f", flowerPrice.get(name)) + ",-");
-        }
-    }
-
 
 
     private void chooseFlower() {
-        displayBouquetByPrice();
+        boolean keepGoing = true;
+        int choice = 0;
 
-        int choice = ui.promptInteger("Choose a flower from the list");
+        while (keepGoing) {
+            displayBouquetByPrice();
+            choice = ui.promptInteger("Choose a flower from the list: ");
+
+            if (choice >= 1 && choice <= 10) {
+                keepGoing = false;
+
+            } else {
+                ui.displayMessage("'" + choice + "' is not on the list, please try again:\n");
+            }
+        }
+
         Flower flower = shopSelection.get(choice - 1);
-        bouquet.add(flower);
-        ui.displayMessage("You chose: " + flower.getName() + "\n"); // Add empty line
+
+        // Check if flower already exists in Map, then add 1 instance to Map
+        bouquet.put(flower, bouquet.getOrDefault(flower, 0) +1);
+
+        // Display choice
+        ui.displayMessage("You chose: " + flower.getName() + "\n");
     }
 
 
@@ -130,11 +132,7 @@ public class FlowerShop {
         int counter = 0;
 
         while (counter < 3) {
-            displayBouquetByPrice();
-            int choice = ui.promptInteger("Choose a flower from the list");
-            Flower flower = shopSelection.get(choice - 1);
-            bouquet.add(flower);
-            ui.displayMessage("You chose: " + flower.getName() + "\n"); // Add empty line
+            chooseFlower();
             counter ++;
         }
     }
@@ -143,8 +141,11 @@ public class FlowerShop {
     private double calculateTotal() {
         double total = 0.0;
 
-        for (Flower f : bouquet){
-            total += f.getPrice();
+        for (Map.Entry<Flower, Integer> entry : bouquet.entrySet()){
+            Flower flower = entry.getKey();
+            int amount = entry.getValue();
+            double typeTotal = flower.getPrice() * amount;
+            total += typeTotal;
         }
 
         if (isFlowersArranged){
@@ -177,12 +178,9 @@ public class FlowerShop {
 
         // Finalise transaction
         if (ui.promptBinary("Do you want to finalize your purchase?")){
-            ui.displayMessage("The total cost is: " + total);
+            ui.displayMessage("The total cost is: " + formattedTotal);
             exitProgram();
-        } else {
-            return;
         }
-
     }
 
 

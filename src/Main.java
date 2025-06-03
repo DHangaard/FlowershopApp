@@ -6,7 +6,5 @@ public class Main {
         flowerShop.addFLower("Rose", 20);
 
         flowerShop.runDialog();
-
-        // TODO Error handling when wrong input
     }
 }

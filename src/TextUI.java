@@ -18,12 +18,6 @@ public class TextUI {
     }
 
 
-    // Overloaded displayMessage that prints an objects toString()
-    public void displayMessage(Object object) {
-        System.out.println(object.toString());
-    }
-
-
     public String formatPriceWithTwoDecimals(double total) {
         String formattedTotal = String.format("%.2f,-", total);
         return formattedTotal;
