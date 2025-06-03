@@ -3,17 +3,17 @@ import java.util.Scanner;
 
 public class TextUI {
 
-    // Attributes
+    // ---------- Attributes ----------
     private Scanner scanner;
 
 
-    // Constructor
+    // ---------- Constructor ----------
     TextUI() {
        scanner = new Scanner(System.in);
     }
 
 
-    // Methods
+    // ---------- Methods ----------
     // Display Methods
     public void displayMessage(String message) {
         System.out.println(message);
@@ -54,19 +54,19 @@ public class TextUI {
 
 
     public boolean promptBinary(String message) {
-        boolean isChoosing = true;
+        boolean keepGoing = true;
         boolean isAnswerYes = false;
         String choice;
 
-        while (isChoosing) {
+        while (keepGoing) {
             choice = promptText(message);
             if (choice.equalsIgnoreCase("y")){
                 isAnswerYes = true;
-                isChoosing = false;
+                keepGoing = false;
 
             } else if (choice.equalsIgnoreCase("n")){
                 isAnswerYes = false;
-                isChoosing = false;
+                keepGoing = false;
 
             } else if (!choice.equalsIgnoreCase("y") || !choice.equalsIgnoreCase("n")) {
                 displayMessage("Error: input either 'y' for yes or 'n' for no: ");
@@ -75,6 +75,7 @@ public class TextUI {
         System.out.println(); // Empty line
         return isAnswerYes;
     }
+
 
     public void closeScanner() {
         scanner.close();

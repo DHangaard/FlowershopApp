@@ -2,7 +2,7 @@ import java.util.*;
 
 public class FlowerShop {
 
-    // Attributes
+    // ---------- Attributes ----------
     private List<Flower> shopSelection;
     private Map<Flower, Integer> bouquet;
     private String name;
@@ -11,7 +11,8 @@ public class FlowerShop {
     private boolean isFlowersArranged;
     private final double arrangedAsBouquetPrice = 50.0;
 
-    // Constructor
+
+    // ---------- Constructor ----------
     FlowerShop(String name){
 
         shopSelection = new ArrayList<>();
@@ -34,7 +35,8 @@ public class FlowerShop {
                             new Flower("Anemone", 40.0));
     }
 
-    // Methods
+
+    // ---------- Methods ----------
     public void runDialog(){
         boolean keepGoing = true;
         int choice;

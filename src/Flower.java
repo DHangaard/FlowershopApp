@@ -1,16 +1,16 @@
 public class Flower {
 
-    // Attributes
+    // ---------- Attributes ----------
     private String name;
     private double price;
 
-    // Constructor
+    // ---------- Constructor ----------
     Flower(String name, double price){
         this.name = name;
         this.price = price;
     }
 
-    // Methods
+    // ---------- Methods ----------
     @Override
     public String toString(){
         String formattedPrice = String.format("%.2f,-", this.price); // Display price with two decimals
