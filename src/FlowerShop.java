@@ -90,7 +90,7 @@ public class FlowerShop {
             String name = entry.getKey().getName();
             int amount = entry.getValue();
             double typeTotal = entry.getKey().getPrice() * amount;
-            String typeTotalFormatted = ui.formatPriceWithTwoDecimals(typeTotal);
+            String typeTotalFormatted = formatPriceWithTwoDecimals(typeTotal);
 
             // Determine whether singular or plural
             String pieceOrPieces = amount > 1 ? " pieces of " : " piece of ";
@@ -167,7 +167,7 @@ public class FlowerShop {
 
         // List current total
         this.total = calculateTotal();
-        String formattedTotal = ui.formatPriceWithTwoDecimals(total);
+        String formattedTotal = formatPriceWithTwoDecimals(total);
         ui .displayMessage("Current total: " + formattedTotal + "\n"); // Add empty line
 
         // Ask if buyer wants to pay for the bouquet to be arranged if more than one flower
@@ -184,17 +184,23 @@ public class FlowerShop {
 
 
     private void arrangeFlowers(){
-        String formmatedArrangeAsBouquetPrice = ui.formatPriceWithTwoDecimals(arrangedAsBouquetPrice);
+        String formmatedArrangeAsBouquetPrice = formatPriceWithTwoDecimals(arrangedAsBouquetPrice);
         String question = "Do you want us to arrange your flowers for a total of " + formmatedArrangeAsBouquetPrice;
         String offerAccepted = "Your flowers will be arranged beautifully!\nNew total: ";
 
         if (ui.promptBinary(question)) {
             this.total += arrangedAsBouquetPrice;
-            String formattedTotal = ui.formatPriceWithTwoDecimals(total);
+            String formattedTotal = formatPriceWithTwoDecimals(total);
             ui.displayMessage(offerAccepted + formattedTotal);
             this.isFlowersArranged = true;
         }
 
+    }
+
+
+    public String formatPriceWithTwoDecimals(double total) {
+        String formattedTotal = String.format("%.2f,-", total);
+        return formattedTotal;
     }
 
 

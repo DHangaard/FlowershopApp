@@ -6,21 +6,17 @@ public class TextUI {
     // Attributes
     private Scanner scanner;
 
+
     // Constructor
     TextUI() {
        scanner = new Scanner(System.in);
     }
 
+
     // Methods
     // Display Methods
     public void displayMessage(String message) {
         System.out.println(message);
-    }
-
-
-    public String formatPriceWithTwoDecimals(double total) {
-        String formattedTotal = String.format("%.2f,-", total);
-        return formattedTotal;
     }
 
 
