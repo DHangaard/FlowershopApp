@@ -92,13 +92,12 @@ public class FlowerShop {
             String name = entry.getKey().getName();
             int amount = entry.getValue();
             double typeTotal = entry.getKey().getPrice() * amount;
-            String typeTotalFormatted = formatPriceWithTwoDecimals(typeTotal);
 
             // Determine whether singular or plural
             String pieceOrPieces = amount > 1 ? " pieces of " : " piece of ";
 
             // Display buyers choice with price
-            ui.displayMessage(amount + pieceOrPieces + name + ": " + typeTotalFormatted);
+            ui.displayMessage(amount + pieceOrPieces + name + ": " + formatPriceWithTwoDecimals(typeTotal));
         }
     }
 
@@ -169,8 +168,7 @@ public class FlowerShop {
 
         // List current total
         this.total = calculateTotal();
-        String formattedTotal = formatPriceWithTwoDecimals(total);
-        ui .displayMessage("Current total: " + formattedTotal + "\n"); // Add empty line
+        ui .displayMessage("Current total: " + formatPriceWithTwoDecimals(total) + "\n"); // Add empty line
 
         // Ask if buyer wants to pay for the bouquet to be arranged if more than one flower
         if (bouquet.size()>1 && !isFlowersArranged){
@@ -179,21 +177,19 @@ public class FlowerShop {
 
         // Finalise transaction
         if (ui.promptBinary("Do you want to finalize your purchase?")){
-            ui.displayMessage("The total cost is: " + formattedTotal);
+            ui.displayMessage("The total cost is: " + formatPriceWithTwoDecimals(total));
             exitProgram();
         }
     }
 
 
     private void arrangeFlowers(){
-        String formmatedArrangeAsBouquetPrice = formatPriceWithTwoDecimals(arrangedAsBouquetPrice);
-        String question = "Do you want us to arrange your flowers for a total of " + formmatedArrangeAsBouquetPrice;
+        String question = "Do you want us to arrange your flowers for a total of " + formatPriceWithTwoDecimals(arrangedAsBouquetPrice);
         String offerAccepted = "Your flowers will be arranged beautifully!\nNew total: ";
 
         if (ui.promptBinary(question)) {
             this.total += arrangedAsBouquetPrice;
-            String formattedTotal = formatPriceWithTwoDecimals(total);
-            ui.displayMessage(offerAccepted + formattedTotal);
+            ui.displayMessage(offerAccepted + formatPriceWithTwoDecimals(total));
             this.isFlowersArranged = true;
         }
 
