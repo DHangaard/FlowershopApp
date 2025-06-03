@@ -37,8 +37,7 @@ public class FlowerShop {
     // Methods
     public void runDialog(){
         boolean keepGoing = true;
-        int menuChoice;
-        char confirmChoice;
+        int choice;
 
         String welcomeMessage = "Welcome to the flowershop: " + this.name + "!" +
                                 "\nChoose an option:" +
@@ -48,8 +47,8 @@ public class FlowerShop {
                                 "\n4) Exit";
 
         while (keepGoing) {
-            menuChoice = ui.promptInteger(welcomeMessage);
-            switch (menuChoice) {
+            choice = ui.promptInteger(welcomeMessage);
+            switch (choice) {
                 case 1:
                     chooseFlower();
                     break;
@@ -62,7 +61,7 @@ public class FlowerShop {
                 case 4:
                     exitProgram();
                 default:
-                    ui.displayMessage("Please choose an option from the list (integer input): ");
+                    ui.displayMessage("'" + choice + "' is not on the menu, please try again:\n");
             }
         }
     }
