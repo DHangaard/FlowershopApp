@@ -16,7 +16,7 @@ public class FlowerShop {
     FlowerShop(String name){
 
         shopSelection = new ArrayList<>();
-        bouquet = new HashMap<>();
+        bouquet = new TreeMap<>(Comparator.comparing(Flower::getName));
 
         this.name = name;
         this.ui = new TextUI();
@@ -75,7 +75,7 @@ public class FlowerShop {
 
 
     public void displayBouquetByPrice() {
-        shopSelection.sort(Comparator.comparing(Flower::getPrice));
+        shopSelection.sort(Comparator.comparing(Flower::getPrice).thenComparing(Flower::getName));
         int counter = 1;
 
         for (Flower f : shopSelection) {
@@ -87,7 +87,7 @@ public class FlowerShop {
 
     public void displayBouquetByName() {
 
-        // Get info from HashMap
+        // Get info from Map
         for (Map.Entry<Flower, Integer> entry : bouquet.entrySet()) {
             String name = entry.getKey().getName();
             int amount = entry.getValue();
